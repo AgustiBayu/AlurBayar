@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.11.0
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.11.1
+	github.com/midtrans/midtrans-go v1.3.8
 	github.com/redis/go-redis/v9 v9.17.3
 )
 

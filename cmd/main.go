@@ -2,10 +2,15 @@ package main
 
 import (
 	"AlurBayar/internal/config"
-	"AlurBayar/internal/product/delivery/http"
-	"AlurBayar/internal/product/delivery/http/route"
-	"AlurBayar/internal/product/repository"
-	"AlurBayar/internal/product/usecase"
+	tsHandler "AlurBayar/internal/transaction/delivery/http"
+	tsRoute "AlurBayar/internal/transaction/delivery/http/route"
+	tsRepo "AlurBayar/internal/transaction/repository"
+	tsUsecase "AlurBayar/internal/transaction/usecase"
+
+	productHandler "AlurBayar/internal/product/delivery/http"
+	productRoute "AlurBayar/internal/product/delivery/http/route"
+	productRepo "AlurBayar/internal/product/repository"
+	productUsecase "AlurBayar/internal/product/usecase"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -20,12 +25,19 @@ func main() {
 	rdb := redis.NewClient(&redis.Options{
 		Addr: config.GetEnv("REDIS_ADDR", "localhost:6379"),
 	})
-	pRepo := repository.NewProductRepository(db)
-	pUsecase := usecase.NewProductUsecase(pRepo, rdb)
-	pHandler := http.NewProductHandler(pUsecase)
+	pRepo := productRepo.NewProductRepository(db)
+	pUsecase := productUsecase.NewProductUsecase(pRepo, rdb)
+	pHandler := productHandler.NewProductHandler(pUsecase)
+
+	midtransServerKey := config.GetEnv("MIDTRANS_SERVER_KEY", "isi-server-key-sandbox-kamu")
+
+	txRepo := tsRepo.NewTransactionRepository(db)
+	txUsecase := tsUsecase.NewTransactionUsecase(pRepo, txRepo, midtransServerKey)
+	txHandler := tsHandler.NewTransactionHandler(txUsecase)
 
 	r := gin.Default()
-	route.MapProductRoutes(r, pHandler)
+	productRoute.MapProductRoutes(r, pHandler)
+	tsRoute.MapTransactionRoutes(r, txHandler)
 
 	// 7. Jalankan Server
 	port := config.GetEnv("APP_PORT", "8080")

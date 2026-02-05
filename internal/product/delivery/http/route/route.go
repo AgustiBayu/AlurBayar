@@ -7,7 +7,7 @@ import (
 )
 
 // MapProductRoutes mendaftarkan semua endpoint produk
-func MapProductRoutes(r *gin.Engine, h http.ProductHandler) {
+func MapProductRoutes(r *gin.Engine, h *http.ProductHandlerImpl) {
 	productGroup := r.Group("/api/v1")
 	{
 		productGroup.GET("/products/:productID", h.GetProduct)

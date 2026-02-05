@@ -12,7 +12,7 @@ type ProductHandlerImpl struct {
 	productUsecase domain.ProductUsecase
 }
 
-func NewProductHandler(u domain.ProductUsecase) ProductHandler {
+func NewProductHandler(u domain.ProductUsecase) *ProductHandlerImpl {
 	return &ProductHandlerImpl{
 		productUsecase: u,
 	}
