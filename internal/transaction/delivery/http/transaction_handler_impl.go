@@ -35,6 +35,7 @@ func (h *TransactionHandlerImpl) Checkout(c *gin.Context) {
 	})
 }
 func (h *TransactionHandlerImpl) HandleNotification(c *gin.Context) {
+	c.Header("Bypass-Tunnel-Reminder", "true")
 	var payload map[string]interface{}
 	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid payload"})

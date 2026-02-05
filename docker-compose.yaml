@@ -25,7 +25,7 @@ services:
   tunnel:
     image: node:alpine
     container_name: alurbayar-tunnel
-    command: sh -c "npm install -g localtunnel && lt --port 8080 --subdomain agusti-payment-dev"
+    command: sh -c "npm install -g localtunnel && lt --port 8080 --subdomain agusti-payment-dev --local-host app"
     depends_on:
       - app
 
